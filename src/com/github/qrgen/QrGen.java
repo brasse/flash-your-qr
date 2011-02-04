@@ -25,7 +25,14 @@ public class QrGen extends Activity
         super.onStart();
         try {
             QRCode code = new QRCode();
-            String url = "http://stackoverflow.com";
+            String url = "http://slashdot.com";
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                Log.i(TAG, "found extras");
+                url = extras.getString("url");
+            } else {
+                Log.i(TAG, "no extras");
+            }
             Encoder.encode(url, ErrorCorrectionLevel.L, code);    
             QrView qrView = (QrView)findViewById(R.id.qr);
             if (qrView == null) {
