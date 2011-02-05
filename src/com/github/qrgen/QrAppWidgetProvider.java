@@ -20,32 +20,36 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
         // belongs to this provider
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
-            Log.i(TAG, "widget update: " + appWidgetId);
+            Log.i(TAG, "widget onUpdate: " + appWidgetId);
 
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, QrGen.class);
-            String url;
-            if (appWidgetId % 2 == 0) {
-                url = "http://stackoverflow.com";
-            } else {
-                url = "http://beliber.se";
-            }
-            intent.putExtra("url", url);
-            PendingIntent pendingIntent = 
-                PendingIntent.getActivity(context, 0, intent, 
-                                          PendingIntent.FLAG_UPDATE_CURRENT);
+            String url = QrAppWidgetConfigure.loadQrData(context, appWidgetId);
 
-            // Get the layout for the App Widget and attach an
-            // on-click listener to the button
-            RemoteViews views = 
-                new RemoteViews(context.getPackageName(), 
-                                R.layout.qr_appwidget);
-            views.setTextViewText(R.id.button, String.valueOf(appWidgetId));
-            views.setOnClickPendingIntent(R.id.button, pendingIntent);
-
-            // Tell the AppWidgetManager to perform an update on the
-            // current App Widget
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+            updateAppWidget(context, appWidgetManager, appWidgetId, url);
         }
+    }
+
+    static void updateAppWidget(Context context,
+                                AppWidgetManager appWidgetManager,
+                                int appWidgetId, 
+                                String qrData) {
+        Log.i(TAG, "widget updateAppWidget: " + appWidgetId + " " + qrData);
+
+        // Create the intent that the widget will launch.
+        Intent intent = new Intent(context, QrGen.class);
+        intent.putExtra("qrdata", qrData);
+        PendingIntent pendingIntent = 
+        PendingIntent.getActivity(context, appWidgetId, intent, 
+                                  PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Create the view.
+        RemoteViews views = new RemoteViews(context.getPackageName(),
+                                            R.layout.qr_appwidget);
+        views.setTextViewText(R.id.button, String.valueOf(appWidgetId));
+        views.setOnClickPendingIntent(R.id.button, pendingIntent);
+
+        // Tell the widget manager
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 }

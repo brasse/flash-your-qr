@@ -29,7 +29,7 @@ public class QrGen extends Activity
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 Log.i(TAG, "found extras");
-                url = extras.getString("url");
+                url = extras.getString("qrdata");
             } else {
                 Log.i(TAG, "no extras");
             }
