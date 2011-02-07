@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 public class QrAppWidgetConfigure extends Activity {
 
+    private static final String TAG = "qrgen";
     private static final String PREFS_NAME
         = "com.github.qrgen.QrAppWidgetProvider";
     private static final String PREF_PREFIX_KEY = "qrdata_";

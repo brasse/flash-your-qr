@@ -46,7 +46,6 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
         // Create the view.
         RemoteViews views = new RemoteViews(context.getPackageName(),
                                             R.layout.qr_appwidget);
-        views.setTextViewText(R.id.button, String.valueOf(appWidgetId));
         views.setOnClickPendingIntent(R.id.button, pendingIntent);
 
         // Tell the widget manager
