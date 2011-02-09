@@ -8,7 +8,7 @@
 <EditText android:id="@+id/qr_data"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:singleLine="true"
+    android:inputType="textUri"
 />
 <Button android:id="@+id/ok_button"
     android:layout_height="wrap_content"
