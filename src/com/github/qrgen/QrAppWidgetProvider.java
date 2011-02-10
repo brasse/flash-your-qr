@@ -24,16 +24,22 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
 
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, QrGen.class);
-            String url = QrAppWidgetConfigure.loadQrData(context, appWidgetId);
+            String url = QrAppWidgetConfigure.loadConf(context, appWidgetId,
+                    QrAppWidgetConfigure.QR_DATA,
+                    context.getString(R.string.default_qrdata));
+            String label = QrAppWidgetConfigure.loadConf(context, appWidgetId,
+                    QrAppWidgetConfigure.LABEL,
+                    context.getString(R.string.default_label));
 
-            updateAppWidget(context, appWidgetManager, appWidgetId, url);
+            updateAppWidget(context, appWidgetManager, appWidgetId, url, label);
         }
     }
 
     static void updateAppWidget(Context context,
                                 AppWidgetManager appWidgetManager,
                                 int appWidgetId, 
-                                String qrData) {
+                                String qrData,
+                                String label) {
         Log.i(TAG, "widget updateAppWidget: " + appWidgetId + " " + qrData);
 
         // Create the intent that the widget will launch.
@@ -46,6 +52,7 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
         // Create the view.
         RemoteViews views = new RemoteViews(context.getPackageName(),
                                             R.layout.qr_appwidget);
+        views.setTextViewText(R.id.label, label);
         views.setOnClickPendingIntent(R.id.button, pendingIntent);
 
         // Tell the widget manager

@@ -17,8 +17,12 @@ public class QrAppWidgetConfigure extends Activity {
         = "com.github.qrgen.QrAppWidgetProvider";
     private static final String PREF_PREFIX_KEY = "qrdata_";
 
+    public static final String QR_DATA = "QR_DATA";
+    public static final String LABEL = "LABEL";
+
     int mAppWidgetId;
     EditText mQrData;
+    EditText mLabel;
 
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -33,6 +37,7 @@ public class QrAppWidgetConfigure extends Activity {
 
         // Find the EditText
         mQrData = (EditText)findViewById(R.id.qr_data);
+        mLabel = (EditText)findViewById(R.id.qr_label);
 
         // Bind the action for the save button.
         findViewById(R.id.ok_button).setOnClickListener(mOnClickListener);
@@ -58,13 +63,16 @@ public class QrAppWidgetConfigure extends Activity {
             // When the button is clicked, save the string in our
             // prefs and return that they clicked OK.
             String qrData = mQrData.getText().toString();
-            saveQrData(context, mAppWidgetId, qrData);
+            String label = mLabel.getText().toString();
+
+            saveConf(context, mAppWidgetId, QR_DATA, qrData);
+            saveConf(context, mAppWidgetId, LABEL, label);
 
             // Push widget update to surface with newly set prefix
             AppWidgetManager appWidgetManager = 
                 AppWidgetManager.getInstance(context);
             QrAppWidgetProvider.updateAppWidget(context, appWidgetManager,
-                                                mAppWidgetId, qrData);
+                                                mAppWidgetId, qrData, label);
 
             // Make sure we pass back the original appWidgetId
             Intent resultValue = new Intent();
@@ -75,20 +83,27 @@ public class QrAppWidgetConfigure extends Activity {
         }
     };
 
-    static void saveQrData(Context context, int appWidgetId, String qrData) {
+    private static String confKey(int appWidgetId, String key) {
+        return PREF_PREFIX_KEY + appWidgetId + "_" + key;
+    }
+
+    static void saveConf(Context context, int appWidgetId, String key,
+                         String value) {
         SharedPreferences.Editor prefs = 
             context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId, qrData);
+        prefs.putString(confKey(appWidgetId, key), value);
         prefs.commit();
     }
 
-    static String loadQrData(Context context, int appWidgetId) {
+    static String loadConf(Context context, int appWidgetId, String key,
+                           String defaultValue) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String qrData = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
-        if (qrData != null) {
-            return qrData;
+        String value =
+            prefs.getString(confKey(appWidgetId, PREF_PREFIX_KEY), null);
+        if (value != null) {
+            return value;
         } else {
-            return context.getString(R.string.default_qrdata);
+            return defaultValue;
         }
     }
 }

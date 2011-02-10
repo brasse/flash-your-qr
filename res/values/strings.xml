@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">QrGen</string>
     <string name="default_qrdata">http://beliber.se</string>
+    <string name="default_label">Beliber</string>
     <string name="config_label">Label</string>
     <string name="config_url">Url</string>
     <string name="config_ok">OK</string>
