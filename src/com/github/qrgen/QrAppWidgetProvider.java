@@ -1,10 +1,18 @@
 package com.github.qrgen;
 
+import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.encoder.ByteMatrix;
+import com.google.zxing.qrcode.encoder.Encoder;
+import com.google.zxing.qrcode.encoder.QRCode;
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -35,6 +43,14 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
         }
     }
 
+    private static void drawIcon(Context context, RemoteViews views,
+            ByteMatrix qrCode) {
+        Bitmap bitmap = Bitmap.createBitmap(50, 50, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        QrDraw.draw(canvas, qrCode, 0, 0, 0, 0);
+        views.setImageViewBitmap(R.id.button, bitmap);
+    }
+
     static void updateAppWidget(Context context,
                                 AppWidgetManager appWidgetManager,
                                 int appWidgetId, 
@@ -54,6 +70,14 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
                                             R.layout.qr_appwidget);
         views.setTextViewText(R.id.label, label);
         views.setOnClickPendingIntent(R.id.button, pendingIntent);
+
+        try {
+            QRCode code = new QRCode();
+            Encoder.encode(qrData, ErrorCorrectionLevel.L, code);
+            drawIcon(context, views, code.getMatrix());
+        } catch (WriterException e) {
+            Log.e(TAG, "Failed to generate QR.", e);
+        }
 
         // Tell the widget manager
         appWidgetManager.updateAppWidget(appWidgetId, views);
