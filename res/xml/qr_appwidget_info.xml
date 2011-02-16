@@ -3,6 +3,6 @@
     android:minHeight="72dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/qr_appwidget"
-    android:configure="com.github.qrgen.QrAppWidgetConfigure"
+    android:configure="com.github.qrgen.WidgetConfigure"
 >
 </appwidget-provider>
