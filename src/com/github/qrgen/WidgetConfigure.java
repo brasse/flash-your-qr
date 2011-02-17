@@ -32,7 +32,7 @@ public class WidgetConfigure extends PreferenceActivity {
 
     private void updateSource(String source) {
         Log.i(TAG, "update: " + source);
-        if (source.equals("sourceManual")) {
+        if (source.equals(getResources().getString(R.string.sourceManual))) {
             manualData.setEnabled(true);
             contactData.setEnabled(false);
         } else {
