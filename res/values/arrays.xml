@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="qr_sources">
+        <item>Free form</item>
+        <item>Pick contact</item>
+    </string-array>
+    <string-array name="qr_source_values">
+        <item>sourceManual</item>
+        <item>sourceContact</item>
+    </string-array>
+</resources>

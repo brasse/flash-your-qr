@@ -2,25 +2,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="@string/configure_widget">
-        <CheckBoxPreference android:id="@+id/free_form"
-            android:title="Free form"
-            android:summary="Manualy enter the data for the QR code."
-            android:defaultValue="true"
-            android:key="qrManual"/>
+        <ListPreference
+           android:title="QR code data source"
+           android:summary="Select from what source the QR code should get its data."
+           android:key="qrSource"
+           android:defaultValue="sourceManual"
+           android:entries="@array/qr_sources"
+           android:entryValues="@array/qr_source_values"
+        />
         <EditTextPreference
             android:title="Data"
             android:summary="http://baha.se/foo"
-            android:dependency="qrManual"
             android:key="qrManualData"/>
-        <CheckBoxPreference android:id="@+id/contact"
-            android:title="Pick contact"
-            android:summary="Pick a contact for the QR code."
-            android:defaultValue="false"
-            android:key="qrContact"/>
         <Preference
             android:title="Contact"
             android:summary="Mattias Svala"
-            android:dependency="qrContact"
             android:key="qrContactData"/>
     </PreferenceCategory>
 </PreferenceScreen>
