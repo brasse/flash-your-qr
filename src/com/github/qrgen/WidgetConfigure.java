@@ -1,6 +1,7 @@
 package com.github.qrgen;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -60,12 +61,17 @@ public class WidgetConfigure extends PreferenceActivity {
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            Uri contactData = data.getData();
-            Log.i(TAG, "uri: " + contactData);
-            Cursor c =  managedQuery(contactData, null, null, null, null);
+            Uri contactUri = data.getData();
+            Log.i(TAG, "uri: " + contactUri);
+            SharedPreferences.Editor prefs =
+                    getPreferenceManager().getSharedPreferences().edit();
+            prefs.putString("qrContactData", contactUri.toString());
+            Cursor c =  managedQuery(contactUri, null, null, null, null);
             if (c.moveToFirst()) {
-                String name = c.getString(c.getColumnIndexOrThrow(Contacts.People.NAME));
+                String name = c.getString(
+                        c.getColumnIndexOrThrow(Contacts.People.NAME));
                 Log.i(TAG, "name: " + name);
+                contactData.setSummary(name.toString());
             }
         }
     }
