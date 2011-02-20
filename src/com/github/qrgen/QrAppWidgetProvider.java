@@ -48,14 +48,8 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
 
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, QrGen.class);
-            String url = QrAppWidgetConfigure.loadConf(context, appWidgetId,
-                    QrAppWidgetConfigure.QR_DATA,
-                    context.getString(R.string.default_qrdata));
-            String label = QrAppWidgetConfigure.loadConf(context, appWidgetId,
-                    QrAppWidgetConfigure.LABEL,
-                    context.getString(R.string.default_label));
-
-            updateAppWidget(context, appWidgetManager, appWidgetId, url, label);
+            QrData qrData = WidgetConfigure.loadConf(context, appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId, qrData);
         }
     }
 
@@ -69,14 +63,18 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
 
     static void updateAppWidget(Context context,
                                 AppWidgetManager appWidgetManager,
-                                int appWidgetId, 
-                                String qrData,
-                                String label) {
-        Log.i(TAG, "widget updateAppWidget: " + appWidgetId + " " + qrData);
+                                int appWidgetId, QrData qrData) {
+        if (qrData.data == null) {
+            qrData.data = "notsetnotset";
+            qrData.label = "foo";
+        }
+
+        Log.i(TAG, "widget updateAppWidget: " + appWidgetId + " " +
+                qrData.data);
 
         // Create the intent that the widget will launch.
         Intent intent = new Intent(context, QrGen.class);
-        intent.putExtra("qrdata", qrData);
+        intent.putExtra("qrdata", qrData.data);
         PendingIntent pendingIntent = 
         PendingIntent.getActivity(context, appWidgetId, intent, 
                                   PendingIntent.FLAG_UPDATE_CURRENT);
@@ -84,18 +82,24 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
         // Create the view.
         RemoteViews views = new RemoteViews(context.getPackageName(),
                                             R.layout.qr_appwidget);
-        views.setTextViewText(R.id.label, label);
+        if (qrData.label != null) {
+            views.setTextViewText(R.id.label, qrData.label);
+        }
         views.setOnClickPendingIntent(R.id.button, pendingIntent);
 
         try {
+            Log.i(TAG, "Draw QR code.");
             QRCode code = new QRCode();
-            Encoder.encode(qrData, ErrorCorrectionLevel.L, code);
-            drawIcon(context, views, code.getMatrix());
+            if (qrData.data != null) {
+                Encoder.encode(qrData.data, ErrorCorrectionLevel.L, code);
+                drawIcon(context, views, code.getMatrix());
+            }
         } catch (WriterException e) {
             Log.e(TAG, "Failed to generate QR.", e);
         }
 
         // Tell the widget manager
+        Log.i(TAG, "Done updating.");
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 }
