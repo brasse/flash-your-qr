@@ -82,7 +82,7 @@ public class WidgetConfigure extends PreferenceActivity {
     }
 
     private void updateSource(String source) {
-        if (source.equals(getResources().getString(R.string.sourceManual))) {
+        if (source.equals(SOURCE_MANUAL)) {
             manualData.setEnabled(true);
             contactData.setEnabled(false);
         } else {
