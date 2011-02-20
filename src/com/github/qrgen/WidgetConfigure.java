@@ -10,8 +10,11 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.provider.Contacts;
+import android.provider.ContactsContract.Contacts;
 import android.util.Log;
+
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 public class WidgetConfigure extends PreferenceActivity {
 
@@ -62,7 +65,7 @@ public class WidgetConfigure extends PreferenceActivity {
                 new Preference.OnPreferenceClickListener() {
                     public boolean onPreferenceClick (Preference preference) {
                         Intent intent = new Intent(Intent.ACTION_PICK, 
-                               Contacts.People.CONTENT_URI);
+                               Contacts.CONTENT_URI);
                         startActivityForResult(intent, 0);
                         return true;
                     }
@@ -97,22 +100,44 @@ public class WidgetConfigure extends PreferenceActivity {
         }
     }
 
+    private void getVCard(Uri uri) {
+        try {
+            BufferedReader r = new BufferedReader(new InputStreamReader(
+                    getContentResolver().openAssetFileDescriptor(uri, "r")
+                    .createInputStream()));
+            String l;
+            do {
+                l = r.readLine();
+                if (l != null) {
+                    Log.i(TAG, "getVCard(): " + l);
+                }
+            } while (l != null);
+        } catch (Exception e) {
+            Log.i(TAG, "Exception...", e);
+        }
+    }
+
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            contactData.setSummary("contact selcted");
             Uri contactUri = data.getData();
             Log.i(TAG, "uri: " + contactUri);
             SharedPreferences.Editor prefs =
                     getPreferenceManager().getSharedPreferences().edit();
             prefs.putString("qrContactData", contactUri.toString());
+            String key = null;
             Cursor c =  managedQuery(contactUri, null, null, null, null);
             if (c.moveToFirst()) {
-                String name = c.getString(
-                        c.getColumnIndexOrThrow(Contacts.People.NAME));
-                Log.i(TAG, "name: " + name);
-                contactData.setSummary(name.toString());
+                key = c.getString(
+                        c.getColumnIndexOrThrow(Contacts.LOOKUP_KEY));
+                Log.i(TAG, "key: " + key);
             }
+            Log.i(TAG, "vcard " + Contacts.CONTENT_VCARD_URI);
+            Uri vCardUri = Uri.withAppendedPath(Contacts.CONTENT_VCARD_URI, key);
+            Log.i(TAG, "uri   " + vCardUri.toString());
+            getVCard(vCardUri);
         }
     }
 
