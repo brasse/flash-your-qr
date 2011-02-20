@@ -52,22 +52,10 @@ public class WidgetConfigure extends PreferenceActivity {
         addPreferencesFromResource(R.xml.widget_configure);
 
         manualData = findPreference(MANUAL);
-        manualData.setOnPreferenceChangeListener(
-                new Preference.OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference p, Object o) {
-                        p.setSummary((String)o);
-                        return true;
-                    }
-                });
+        manualData.setOnPreferenceChangeListener(setSummary);
 
         Preference label = findPreference(LABEL);
-        label.setOnPreferenceChangeListener(
-                new Preference.OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference p, Object o) {
-                        p.setSummary((String)o);
-                        return true;
-                    }
-                });
+        label.setOnPreferenceChangeListener(setSummary);
 
         contactData = findPreference(CONTACT);
         contactData.setOnPreferenceClickListener(
@@ -90,6 +78,14 @@ public class WidgetConfigure extends PreferenceActivity {
                     }
                 });
     }
+
+    private Preference.OnPreferenceChangeListener setSummary = 
+            new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference p, Object o) {
+                    p.setSummary((String)o);
+                    return true;
+                }
+            };
 
     private void updateSource(String source) {
         if (source.equals(SOURCE_MANUAL)) {
