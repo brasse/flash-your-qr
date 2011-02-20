@@ -11,12 +11,10 @@
            android:entryValues="@array/qr_source_values"
         />
         <EditTextPreference
-            android:title="Data"
-            android:summary="http://baha.se/foo"
+            android:title="Free form"
             android:key="qrManualData"/>
         <Preference
             android:title="Contact"
-            android:summary="Mattias Svala"
             android:key="qrContactData"/>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -51,7 +51,24 @@ public class WidgetConfigure extends PreferenceActivity {
         addPreferencesFromResource(R.xml.widget_configure);
 
         manualData = findPreference(MANUAL);
+        manualData.setOnPreferenceChangeListener(
+                new Preference.OnPreferenceChangeListener() {
+                    public boolean onPreferenceChange(Preference p, Object o) {
+                        p.setSummary((String)o);
+                        return true;
+                    }
+                });
+
         contactData = findPreference(CONTACT);
+        contactData.setOnPreferenceClickListener(
+                new Preference.OnPreferenceClickListener() {
+                    public boolean onPreferenceClick (Preference preference) {
+                        Intent intent = new Intent(Intent.ACTION_PICK, 
+                               Contacts.People.CONTENT_URI);
+                        startActivityForResult(intent, 0);
+                        return true;
+                    }
+                });
 
         ListPreference source = (ListPreference)findPreference(SOURCE);
         updateSource(source.getValue());
@@ -59,16 +76,6 @@ public class WidgetConfigure extends PreferenceActivity {
                 new Preference.OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference p, Object o) {
                         updateSource((String)o);
-                        return true;
-                    }
-                });
-
-        contactData.setOnPreferenceClickListener(
-                new Preference.OnPreferenceClickListener() {
-                    public boolean onPreferenceClick (Preference preference) {
-                        Intent intent = new Intent(Intent.ACTION_PICK, 
-                               Contacts.People.CONTENT_URI);
-                        startActivityForResult(intent, 0);
                         return true;
                     }
                 });
@@ -110,7 +117,9 @@ public class WidgetConfigure extends PreferenceActivity {
         QrData qrData = loadConf(context, mWidgetId);
 
         if (qrData.data == null) {
+            Log.i(TAG, "No data provided for QR code.");
             setResult(RESULT_CANCELED);
+            super.onBackPressed();
             return;
         }
 
