@@ -16,5 +16,8 @@
         <Preference
             android:title="Contact"
             android:key="qrContactData"/>
+        <EditTextPreference
+            android:title="Label"
+            android:key="qrLabel"/>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -20,6 +20,7 @@ public class WidgetConfigure extends PreferenceActivity {
     private static final String SOURCE = "qrSource";
     private static final String MANUAL = "qrManualData";
     private static final String CONTACT = "qrContactData";
+    private static final String LABEL = "qrLabel";
     private static final String SOURCE_MANUAL = "sourceManual";
     private static final String SOURCE_CONTACT = "sourceContact";
 
@@ -52,6 +53,15 @@ public class WidgetConfigure extends PreferenceActivity {
 
         manualData = findPreference(MANUAL);
         manualData.setOnPreferenceChangeListener(
+                new Preference.OnPreferenceChangeListener() {
+                    public boolean onPreferenceChange(Preference p, Object o) {
+                        p.setSummary((String)o);
+                        return true;
+                    }
+                });
+
+        Preference label = findPreference(LABEL);
+        label.setOnPreferenceChangeListener(
                 new Preference.OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference p, Object o) {
                         p.setSummary((String)o);
@@ -145,7 +155,7 @@ public class WidgetConfigure extends PreferenceActivity {
             data = prefs.getString(CONTACT, null);
         }
 
-        return new QrData(data, "qr");
+        return new QrData(data, prefs.getString(LABEL, ""));
     }
 
 }
