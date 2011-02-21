@@ -121,7 +121,6 @@ public class WidgetConfigure extends PreferenceActivity {
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            contactData.setSummary("contact selcted");
             Uri contactUri = data.getData();
             Log.i(TAG, "uri: " + contactUri);
             SharedPreferences.Editor prefs =
@@ -133,6 +132,10 @@ public class WidgetConfigure extends PreferenceActivity {
                 key = c.getString(
                         c.getColumnIndexOrThrow(Contacts.LOOKUP_KEY));
                 Log.i(TAG, "key: " + key);
+                String displayName = c.getString(
+                        c.getColumnIndexOrThrow(Contacts.DISPLAY_NAME));
+                Log.i(TAG, "display name: " + displayName);
+                contactData.setSummary(displayName);
             }
             Log.i(TAG, "vcard " + Contacts.CONTENT_VCARD_URI);
             Uri vCardUri = Uri.withAppendedPath(Contacts.CONTENT_VCARD_URI, key);
