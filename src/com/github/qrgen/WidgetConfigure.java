@@ -123,15 +123,16 @@ public class WidgetConfigure extends PreferenceActivity {
         if (resultCode == RESULT_OK) {
             Uri contactUri = data.getData();
             Log.i(TAG, "uri: " + contactUri);
-            SharedPreferences.Editor prefs =
-                    getPreferenceManager().getSharedPreferences().edit();
-            prefs.putString("qrContactData", contactUri.toString());
             String key = null;
             Cursor c =  managedQuery(contactUri, null, null, null, null);
             if (c.moveToFirst()) {
                 key = c.getString(
                         c.getColumnIndexOrThrow(Contacts.LOOKUP_KEY));
                 Log.i(TAG, "key: " + key);
+                SharedPreferences.Editor prefs =
+                        getPreferenceManager().getSharedPreferences().edit();
+                prefs.putString("qrContactData", key);
+                prefs.commit();
                 String displayName = c.getString(
                         c.getColumnIndexOrThrow(Contacts.DISPLAY_NAME));
                 Log.i(TAG, "display name: " + displayName);
