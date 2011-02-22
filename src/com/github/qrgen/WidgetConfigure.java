@@ -21,8 +21,8 @@ public class WidgetConfigure extends PreferenceActivity {
     private static final String MANUAL = "qrManualData";
     private static final String CONTACT = "qrContactData";
     private static final String LABEL = "qrLabel";
-    private static final String SOURCE_MANUAL = "sourceManual";
-    private static final String SOURCE_CONTACT = "sourceContact";
+    public static final String SOURCE_MANUAL = "sourceManual";
+    public static final String SOURCE_CONTACT = "sourceContact";
 
     private int mWidgetId;
     private Preference manualData;
@@ -154,14 +154,15 @@ public class WidgetConfigure extends PreferenceActivity {
     static QrData loadConf(Context context, int widgetId) {
         SharedPreferences prefs = 
                 context.getSharedPreferences(prefsName(widgetId), 0);
+        String source = prefs.getString(SOURCE, null);
         String data;
-        if (SOURCE_MANUAL.equals(prefs.getString(SOURCE, null))) {
+        if (SOURCE_MANUAL.equals(source)) {
             data = prefs.getString(MANUAL, null);
         } else {
             data = prefs.getString(CONTACT, null);
         }
 
-        return new QrData(data, prefs.getString(LABEL, ""));
+        return new QrData(source, data, prefs.getString(LABEL, ""));
     }
 
 }

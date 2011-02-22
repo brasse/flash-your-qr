@@ -74,6 +74,7 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
 
         // Create the intent that the widget will launch.
         Intent intent = new Intent(context, QrGen.class);
+        intent.putExtra("source", qrData.source);
         intent.putExtra("qrdata", qrData.data);
         PendingIntent pendingIntent = 
         PendingIntent.getActivity(context, appWidgetId, intent, 

@@ -36,20 +36,36 @@ public class QrGen extends Activity
         setContentView(R.layout.main);
     }
 
+    private String getQrData(Bundle extras) {
+        String source = extras.getString("source");
+        String data = extras.getString("qrdata");
+        if (WidgetConfigure.SOURCE_MANUAL.equals(source)) {
+            return data;
+        } else {
+            assert WidgetConfigure.SOURCE_CONTACT.equals(source);
+            try {
+                return Contact.getVCard(this, data);
+            } catch (Exception fe) {
+                return "vCard failed";
+            }
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         try {
             QRCode code = new QRCode();
-            String url = "http://slashdot.com";
+            String qrData = "http://slashdot.com";
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 Log.i(TAG, "found extras");
-                url = extras.getString("qrdata");
+                // qrData = extras.getString("qrdata");
+                qrData = getQrData(extras);
             } else {
                 Log.i(TAG, "no extras");
             }
-            Encoder.encode(url, ErrorCorrectionLevel.L, code);    
+            Encoder.encode(qrData, ErrorCorrectionLevel.L, code);
             QrView qrView = (QrView)findViewById(R.id.qr);
             if (qrView == null) {
                 Log.i(TAG, "view is null");
