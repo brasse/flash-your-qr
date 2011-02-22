@@ -13,9 +13,6 @@ import android.preference.PreferenceActivity;
 import android.provider.ContactsContract.Contacts;
 import android.util.Log;
 
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-
 public class WidgetConfigure extends PreferenceActivity {
 
     private static final String TAG = "qrgen";
@@ -100,23 +97,6 @@ public class WidgetConfigure extends PreferenceActivity {
         }
     }
 
-    private void getVCard(Uri uri) {
-        try {
-            BufferedReader r = new BufferedReader(new InputStreamReader(
-                    getContentResolver().openAssetFileDescriptor(uri, "r")
-                    .createInputStream()));
-            String l;
-            do {
-                l = r.readLine();
-                if (l != null) {
-                    Log.i(TAG, "getVCard(): " + l);
-                }
-            } while (l != null);
-        } catch (Exception e) {
-            Log.i(TAG, "Exception...", e);
-        }
-    }
-
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
@@ -138,10 +118,11 @@ public class WidgetConfigure extends PreferenceActivity {
                 Log.i(TAG, "display name: " + displayName);
                 contactData.setSummary(displayName);
             }
-            Log.i(TAG, "vcard " + Contacts.CONTENT_VCARD_URI);
-            Uri vCardUri = Uri.withAppendedPath(Contacts.CONTENT_VCARD_URI, key);
-            Log.i(TAG, "uri   " + vCardUri.toString());
-            getVCard(vCardUri);
+            try {
+                Log.i(TAG, "vCard " + Contact.getVCard(this, key));
+            } catch (Exception e) {
+                Log.i(TAG, "Failed to get vCard.");
+            }
         }
     }
 
