@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">QrGen</string>
-    <string name="default_qrdata">http://beliber.se</string>
-    <string name="default_label">Beliber</string>
-    <string name="config_label">Label</string>
-    <string name="config_url">Url</string>
-    <string name="config_ok">OK</string>
-    <string name="configure_widget">Configure Widget</string>
+    <string name="app_name">Flash Your QR</string>
+
+    <string name="conf_title">Configure Widget</string>
+    <string name="conf_source_title">
+      QR code data source
+    </string>
+    <string name="conf_source_summary">
+      Select Free form or Contact QR code data source.
+    </string>
+    <string name="conf_manual_title">Free form</string>
+    <string name="conf_contact_title">Contact</string>
+    <string name="conf_label_title">Widget label</string>
+
 </resources>

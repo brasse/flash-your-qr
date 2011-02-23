@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="@string/configure_widget">
+        android:title="@string/conf_title">
         <ListPreference
-           android:title="QR code data source"
-           android:summary="Select from what source the QR code should get its data."
+           android:title="@string/conf_source_title"
+           android:summary="@string/conf_source_summary"
            android:key="qrSource"
            android:defaultValue="sourceManual"
            android:entries="@array/qr_sources"
            android:entryValues="@array/qr_source_values"
         />
         <EditTextPreference
-            android:title="Free form"
+           android:title="@string/conf_manual_title"
             android:key="qrManualData"/>
         <Preference
-            android:title="Contact"
+            android:title="@string/conf_contact_title"
             android:key="qrContactData"/>
         <EditTextPreference
-            android:title="Label"
+            android:title="@string/conf_label_title"
             android:key="qrLabel"/>
     </PreferenceCategory>
 </PreferenceScreen>
