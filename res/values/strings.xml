@@ -12,5 +12,7 @@
     <string name="conf_manual_title">Free form</string>
     <string name="conf_contact_title">Contact</string>
     <string name="conf_label_title">Widget label</string>
-
+    <string name="conf_qr_failed">
+      QR code failed. Is the data too large?
+    </string>
 </resources>

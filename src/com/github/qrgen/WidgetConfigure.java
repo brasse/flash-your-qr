@@ -16,6 +16,10 @@
 
 package com.github.qrgen;
 
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.encoder.Encoder;
+import com.google.zxing.qrcode.encoder.QRCode;
+
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -113,6 +117,18 @@ public class WidgetConfigure extends PreferenceActivity {
         }
     }
 
+    private boolean validateContact(String lookupKey) {
+        try {
+            String data = Contact.getVCard(this, lookupKey);
+            QRCode code = new QRCode();
+            Encoder.encode(data, ErrorCorrectionLevel.L, code);
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to generate QR.", e);
+            return false;
+        }
+    }
+
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
@@ -125,6 +141,12 @@ public class WidgetConfigure extends PreferenceActivity {
                 key = c.getString(
                         c.getColumnIndexOrThrow(Contacts.LOOKUP_KEY));
                 Log.i(TAG, "key: " + key);
+            } else {
+                Log.e(TAG, "No results from contact query");
+                return;
+            }
+
+            if (validateContact(key)) {
                 SharedPreferences.Editor prefs =
                         getPreferenceManager().getSharedPreferences().edit();
                 prefs.putString("qrContactData", key);
@@ -133,6 +155,9 @@ public class WidgetConfigure extends PreferenceActivity {
                         c.getColumnIndexOrThrow(Contacts.DISPLAY_NAME));
                 Log.i(TAG, "display name: " + displayName);
                 contactData.setSummary(displayName);
+            } else {
+                contactData.setSummary(getResources().
+                        getString(R.string.conf_qr_failed));
             }
             try {
                 Log.i(TAG, "vCard " + Contact.getVCard(this, key));
