@@ -11,11 +11,6 @@
         <activity android:name=".QrGen"
                   android:label="@string/app_name">
         </activity>
-        <activity android:name=".QrAppWidgetConfigure">
-          <intent-filter>
-            <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-          </intent-filter>
-        </activity>
         <activity android:name=".WidgetConfigure">
           <intent-filter>
             <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
