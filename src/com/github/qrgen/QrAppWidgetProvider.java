@@ -36,6 +36,8 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
 
     private static final String TAG = "qrgen";
 
+    public static final String FLASH_QR = "com.github.qrgen.FLASH_QR";
+
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
                          int[] appWidgetIds) {
         final int N = appWidgetIds.length;
@@ -73,7 +75,7 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
                 qrData.data);
 
         // Create the intent that the widget will launch.
-        Intent intent = new Intent(context, QrGen.class);
+        Intent intent = new Intent(FLASH_QR, null, context, QrGen.class);
         intent.putExtra("source", qrData.source);
         intent.putExtra("qrdata", qrData.data);
         PendingIntent pendingIntent = 

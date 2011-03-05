@@ -22,8 +22,11 @@ import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.os.Bundle;
+
+import java.util.Iterator;
 
 public class QrGen extends Activity
 {
@@ -55,16 +58,18 @@ public class QrGen extends Activity
     public void onStart() {
         super.onStart();
         try {
-            QRCode code = new QRCode();
-            String qrData = "http://slashdot.com";
+            String qrData = "failed to get the thing";
+            Intent intent = getIntent();
+            String action = intent.getAction();
             Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                Log.i(TAG, "found extras");
-                // qrData = extras.getString("qrdata");
+            if (action.equals(QrAppWidgetProvider.FLASH_QR)) {
                 qrData = getQrData(extras);
+            } else if (action.equals(Intent.ACTION_SEND)) {
+                qrData = extras.getString(Intent.EXTRA_TEXT);
             } else {
-                Log.i(TAG, "no extras");
+                Log.i(TAG, "Unknown action: " + action);
             }
+            QRCode code = new QRCode();
             Encoder.encode(qrData, ErrorCorrectionLevel.L, code);
             QrView qrView = (QrView)findViewById(R.id.qr);
             if (qrView == null) {
