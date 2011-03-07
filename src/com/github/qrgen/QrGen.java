@@ -24,6 +24,7 @@ import com.google.zxing.qrcode.encoder.QRCode;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.view.Menu;
 import android.os.Bundle;
 
 import java.util.Iterator;
@@ -31,6 +32,10 @@ import java.util.Iterator;
 public class QrGen extends Activity
 {
     private static final String TAG = "qrgen";
+
+    public static final int SETTINGS_ID = Menu.FIRST;
+
+    private Integer widgetId;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -57,6 +62,7 @@ public class QrGen extends Activity
     @Override
     public void onStart() {
         super.onStart();
+        widgetId = null;
         try {
             String qrData = "failed to get the thing";
             Intent intent = getIntent();
@@ -64,6 +70,7 @@ public class QrGen extends Activity
             Bundle extras = getIntent().getExtras();
             if (action.equals(QrAppWidgetProvider.FLASH_QR)) {
                 qrData = getQrData(extras);
+                widgetId = extras.getInt("widgetId");
             } else if (action.equals(Intent.ACTION_SEND)) {
                 qrData = extras.getString(Intent.EXTRA_TEXT);
             } else {
@@ -82,5 +89,14 @@ public class QrGen extends Activity
         } catch (WriterException e) {
             Log.e(TAG, "Failed to generate QR.", e);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean result = super.onCreateOptionsMenu(menu);
+        if (widgetId != null) {
+            menu.add(0, SETTINGS_ID, 0, "Settings");
+        }
+        return result;
     }
 }

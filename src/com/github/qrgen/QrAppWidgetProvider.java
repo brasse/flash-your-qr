@@ -76,6 +76,7 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(FLASH_QR, null, context, QrGen.class);
         intent.putExtra("source", qrData.source);
         intent.putExtra("qrdata", qrData.data);
+        intent.putExtra("widgetId", appWidgetId);
         PendingIntent pendingIntent = 
         PendingIntent.getActivity(context, appWidgetId, intent, 
                                   PendingIntent.FLAG_UPDATE_CURRENT);
