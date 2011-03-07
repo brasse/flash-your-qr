@@ -48,8 +48,6 @@ public class QrAppWidgetProvider extends AppWidgetProvider {
             int appWidgetId = appWidgetIds[i];
             Log.i(TAG, "widget onUpdate: " + appWidgetId);
 
-            // Create an Intent to launch ExampleActivity
-            Intent intent = new Intent(context, QrGen.class);
             QrData qrData = WidgetConfigure.loadConf(context, appWidgetId);
             updateAppWidget(context, appWidgetManager, appWidgetId, qrData);
         }
